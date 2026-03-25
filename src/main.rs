@@ -72,9 +72,7 @@ fn atomic_create_dir<P:AsRef<Path>, E:AsRef<OsStr>>(path:P, tmp_extension:E) -> 
 use std::os::unix::fs::symlink;
 
 fn atomic_symlink<P:AsRef<Path>, E:AsRef<OsStr>>(path:P, tmp_extension:E, source:P) -> std::io::Result<()> {
-    let (path,tmp_extension) = (path.as_ref(),tmp_extension.as_ref());
-    let mut tmp_path = PathBuf::from(path);
-    tmp_path.add_extension(tmp_extension);
+    let tmp_path = add_extension_to_path(&path, &tmp_extension);
 
     symlink(source, &tmp_path)?; //ORDER IS FLIPPED
     rename(&tmp_path, &path)?; 
